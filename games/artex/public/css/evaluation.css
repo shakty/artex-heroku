@@ -1,0 +1,46 @@
+ul {
+    margin: 10px;
+}
+
+div#container_evaluation {
+    float: left;
+    width: auto;
+}
+
+div#container_done {
+    float: right;
+    height: 100px;
+    width: 400px;
+    border: 0;
+    padding:0;
+    padding-top: 300px;
+    background: white;
+}
+
+table.reviewBox {
+    float: left;
+}
+
+input.curr-eva-input {
+    border: 0;
+    color: #f6931f;
+    font-weight: bold;
+    background: white;
+    width: 50px;
+    text-align:center;
+}
+
+span.ex-header {
+    font-weight: bold;
+}
+
+span#eva-text {
+    font-size: 20px;
+}
+
+img.sliderimage {
+    display: block;
+    margin-left: 10%;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}

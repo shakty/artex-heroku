@@ -1,0 +1,43 @@
+<!doctype html>
+<title>Survey</title>
+<link rel="stylesheet" href="/lib/bootstrap/bootstrap.min.css" />
+<!-- JQUERY UI STARTS -->
+<link type="text/css" href="lib/jqueryui/css/ui-lightness/jquery-ui-1.8.20.custom.css" rel="Stylesheet" />
+<script src="lib/jqueryui/js/jquery-1.7.2.min.js" charset="utf-8"></script>
+<script src="lib/jqueryui/js/jquery-ui-1.8.20.custom.min.js" charset="utf-8"></script>
+<!-- JQUERY UI ENDS -->
+
+<link rel='stylesheet' href='/stylesheets/nodegame.css'></link>
+<link rel="stylesheet" type="text/css" href="css/iframe.css">
+<link rel="stylesheet" type="text/css" href="css/quiz.css">
+<body>
+  
+  <div id="container_quiz">
+    <h1>Survey</h1>
+    <div id="quiz"> 
+
+      <p class="important">
+        <strong>Important!</strong> This decision affects your points.
+      </p>
+
+      <p style="padding: 10px">
+        You must now decide how to split a varying number
+        of <strong>bonus points</strong> between you and another randomly
+        selected participant in the experiment.  
+        
+        <br/> <br/> We will randomly select one of your choices and
+        add the bonus points to you and the other participant.
+      </p>
+      
+    </div>
+  </div>
+  
+</div>
+</body>
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function() {
+  var node;
+  node = parent.node;
+  node.widgets.append(node.game.svo, document.getElementById('quiz'));
+  });
+</script>

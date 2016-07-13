@@ -1,0 +1,132 @@
+<!doctype html>
+<title>Instructions</title>
+<link rel="stylesheet" href="/lib/bootstrap/bootstrap.min.css" />
+
+<!-- JQUERY UI STARTS -->
+<link type="text/css" href="lib/jqueryui/css/ui-lightness/jquery-ui-1.8.20.custom.css" rel="Stylesheet" />
+<script src="lib/jqueryui/js/jquery-1.7.2.min.js" charset="utf-8"></script>
+<script src="lib/jqueryui/js/jquery-ui-1.8.20.custom.min.js" charset="utf-8"></script>
+<!-- JQUERY UI ENDS -->
+
+<link rel="stylesheet" type="text/css" href="css/iframe.css">
+<link rel="stylesheet" type="text/css" href="css/instructions.css">
+<body>
+
+  <div id="container_instructions">
+    <h1>Welcome to the Art Exhibition Game!</h1>
+
+    <div id="instructions">
+      <img src="images/instructions/painter.jpeg" width="200px" />
+      <span id="scrolldown">Scroll the page to read the whole text. </br> Read carefully and with no hurry.</span>
+      <p>
+        <h3>Introduction</h3>
+
+        You are part of a community of <strong>9</strong> painters
+        (including you). You will play the role of both
+        the <em>artist</em> and the <em>art critic</em>. The community
+        will collectively decide which paintings can be displayed
+        in <strong>3</strong> artistic
+        exhibitions: <em>A</em>, <em>B</em>, and <em>C</em>.
+
+      </p>
+
+      Always keep in mind: In this game you will act both as
+      an <em>artist</em> and as an <em>art critic</em>.
+
+      <p>
+      <h3>The game</h3>
+
+      The game is repeated <strong id="ng_replace_repeat"></strong>
+      rounds. Each round is divided in 4 steps:
+
+      <ul>
+        <li><strong>Step 1: </strong>Each participant creates 1
+        painting.
+        </li>
+        <li>
+          <strong>Step 2: </strong>Each participant chooses 1
+          exhibition to which to submit the work of art.
+        </li>
+        <li>
+          <strong>Step 3: </strong>Each participant reviews 3 of the 8
+          paintings produced by the other artists.  The review is done
+          by assigning a score on a scale from 0 to 10.
+          </li>
+
+        <li>
+          <strong>Step 4: </strong> The best paintings are displayed
+          in the exhibition to which they have been submitted, and
+          generate reward points for their authors. Paintings that are
+          not displayed never generate reward points. The complete
+          payoff scheme is explained below.
+
+        </li>
+      </ul>
+
+      </p>
+      
+      <p>
+        <h3>Exhibition displays</h3> 
+        
+          <span id="ng_replace_pubrule_text"></span>
+        
+      </p>
+
+      <p>
+      <h3>Who reviews what</h3>
+
+        <ul>
+          <li>At each round you will be <em>randomly</em> assigned to review 3 paintings, and you can never review your own painting.</li>
+        </ul>
+
+      </p>
+
+      <p>
+      <h3>Other rules</h3>
+      <ul>
+         <li>You have a limited amount of time to complete each step of the game. The time left will be displayed on the screen.</li>
+         <li>At each new round, when creating a new painting, you will continue from your previous submission.</li>
+         <li>It is possible to copy paintings from the past exhibitions.</li>
+      </ul>
+      </p>   
+
+      <h3>Continue</h3>
+      If you understood the instructions, click now the "Done Button."
+    </div>
+
+  </div>
+</body>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var node, W, s;
+        var a, b, c, p, ps;
+        node = parent.node;
+        W = parent.W;
+        s = node.game.settings;
+        
+        W.setInnerHTML('ng_replace_pubrule_text', s.pubrule_text);
+        W.setInnerHTML('ng_replace_repeat', s.REPEAT);
+
+        if (s.treatmentName === 'rank_skew') {
+//             p = 'painting';
+//             ps = 'paintings';
+//             a = s.exA.N === 1 ? p : s.exA.N + ' ' + ps;
+//             b = s.exB.N === 1 ? p : s.exB.N + ' ' + ps;
+//             c = s.exC.N === 1 ? p : s.exC.N + ' ' + ps;
+            a = s.exA.N;
+            b = s.exB.N;
+            c = s.exC.N;
+
+            W.setInnerHTML('ng_replace_threshold_A', a);
+            W.setInnerHTML('ng_replace_threshold_B', b);
+            W.setInnerHTML('ng_replace_threshold_C', c);
+            W.setInnerHTML('ng_replace_award_A', s.exA.reward);
+            W.setInnerHTML('ng_replace_award_B', s.exB.reward);
+            W.setInnerHTML('ng_replace_award_C', s.exC.reward);
+        }
+        else if (s.treatmentName === 'rank_same') {
+            W.setInnerHTML('ng_replace_threshold', s.exA.N);
+            W.setInnerHTML('ng_replace_award', s.exA.reward);
+        }
+    });
+</script>

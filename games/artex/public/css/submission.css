@@ -1,0 +1,206 @@
+/* Submission CSS */
+/* ************** */
+
+/* Creation */
+
+div#container {
+    float: left;
+    width: 900px;
+}
+
+div#container_done {
+    float: right;
+    height: 100px;
+    width: 400px;
+    border: 0;
+    padding:0;
+    background: white;
+}
+
+div#creation {
+    border: 0;
+    padding: 0;
+    margin: 0 auto;
+    margin-top: 10px;
+    width: 98%;
+    text-align: center;
+}
+
+div#creation div.chernofffaces {
+    text-align: center;
+}
+
+div#creation div.chernofffaces canvas {
+    margin: 0 auto;
+}
+
+table.cf_table {
+    margin: 0 auto;
+    text-align: center;
+}
+
+table.cf_table td {
+    vertical-align: top;
+    padding: 5px;
+}
+
+table.cf_table td div {
+    border: 0;
+}
+
+div.ng_widget, div.panel-heading, div.panel-body {
+    border: 0;
+    padding: 0;
+}
+
+
+/* Main table */
+
+table#table-decision {
+    border-spacing: 20px;
+    border-collapse: collapse;
+    margin-top: 20px;
+    margin: 0 auto;
+    width: 98%;
+}
+
+td#td-A, td#td-B, td#td-C {
+    padding: 20px;
+    padding-bottom: 0;
+    width: 300px;
+    text-align: center;
+    height: 50px;
+    vertical-align: top;
+    border-right: 2px solid #CCC;
+}
+
+table#table-decision td:last-child {
+    border-right: 0;
+}
+
+table#table-decision input {
+    width: 98%;
+    height: 98%;
+}
+
+td#td-A:hover, td#td-B:hover, td#td-C:hover {
+    background: #FFE;
+    cursor: pointer;
+    cursor: hand;
+}
+
+/* Nested table */
+
+table.table-rules {
+    border-spacing: 0;
+    border-collapse: collapse;
+    padding: 0;
+    margin: 0;
+    margin-top: 15px !important;
+    border: 0;
+    text-align: right;
+}
+
+table.table-rules tr {
+    border: 0;
+    border-bottom: 1px solid #CCC;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+table.table-rules td {
+    padding: 2px;
+    margin: 0;
+    border: 0;    
+}
+
+td.table-rules-left {
+    width: 90%;
+    text-align: left;
+}
+
+/* Exhibition List */
+
+div.ex-column {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    max-height: 180px;
+    /*overflow-x: auto;*/
+    text-align: center;
+    width: 250px;
+    background-color: transparent;
+}
+
+
+td#td-A-past-images, td#td-B-past-images, td#td-C-past-images {
+    padding: 20px;
+    padding-top: 3px;
+    width: 300px;
+    text-align: center;
+    height: 50px;
+    vertical-align: top;
+    border-right: 2px solid #CCC;
+}
+
+
+
+div#div-button {
+    clear: both;
+    margin-top: 10px;
+    text-align: center;
+    border: 10px;
+    font-size: 20px;
+}
+
+td.td-selected {
+    background: #FFC;
+    /* border: 1px solid #CCC; */
+    
+}
+
+td.td-not-selected {
+    border: 5px solid #CCC;
+}
+
+span.td-title {
+    display: block;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+table.exhibition {
+    margin: 20px auto;
+}
+
+table.exhibition td:hover {
+    background: #DADCCB;
+}
+
+span.noimages {
+    padding-top: 20px;
+    font-style: italic;
+    display: block;    
+}
+
+/* General */
+
+span.title {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    display: block;
+}
+
+span.seemore {
+    display: block;
+    color: #0000EE;
+}
+
+span.seemore:hover {
+    cursor: pointer;
+    cursor: hand;
+    text-decoration: underline;
+}

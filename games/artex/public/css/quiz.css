@@ -1,0 +1,165 @@
+ul, ol {
+    margin: 30px 0 30px 10px;
+}
+
+li {
+    margin-bottom: 20px;
+}
+
+div#container_quiz {
+    margin: 0 auto;
+    width: 800px;
+    border: 0;
+    background: #fff;
+}
+
+div#quiz {
+    margin: 0 auto;
+    width: 800px;
+    text-align: left;
+    padding: 10px;
+}
+
+div#quiz dl {
+    margin: 0 auto !important;
+}
+
+div#quiz dt {
+    margin-bottom: 30px;
+    padding-left: 20px;
+}
+
+div#quiz dt:last-child {
+    margin-bottom: 0;
+}
+
+.question {
+    font-weight: bold;
+}
+
+.important {
+    /*font-weight: bold;*/
+    font-size: 22px;
+    text-align: center;
+    padding: 5px;
+}
+
+table.choicetable {
+    margin-top: 10px;
+    font-weight: normal;
+}
+
+
+div.ng_widget, div.panel-heading, div.panel-body {
+    border: 0;
+    padding: 0;
+}
+
+/* Quiz */
+
+span#insideh1 {
+    font-size: 16px;
+}
+
+.quiz_result {
+    font-weight: bold;
+}
+
+table#reviewSelect td, table#rewards td {
+    width: 720px;
+    text-align: left;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+table#reviewRange td {
+    width: 240px;
+}
+
+/* Mood */ 
+
+div#quiz div.moodgauge {
+    margin: 0 auto;
+    text-align: center;
+}
+
+div#quiz div.moodgauge span.choicetable-maintext, div#quiz div.moodgauge table.choicetable {
+    text-align: center;
+}
+
+div#quiz div.moodgauge span.choicetable-maintext {
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+div#quiz div.moodgauge table.choicetable {
+    margin: 0 auto;
+    text-align: center;
+    border-spacing: 0 5px;
+    border-collapse: separate; 
+}
+
+div.moodgauge table.choicetable td {
+    width: 80px !important;
+}
+
+div.moodgauge table.choicetable td.choicetable-left {
+    min-width: 260px !important;
+}
+
+div.moodgauge span.emotion {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+div.moodgauge table.choicetable td.choicetable-right {
+    width: 100px;
+}
+
+/* SVO */ 
+
+div#quiz div.svogauge table.choicetable {
+    margin: 0 auto;
+    text-align: center;
+    border-spacing: 0 30px;
+    border-collapse: separate; 
+}
+
+div#quiz div.svogauge table td {
+    width: 60px !important;
+}
+
+div#quiz div.svogauge span.choicetable-maintext {
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+div.svogauge hr {
+    margin: 10px auto;
+}
+
+div.svogauge td.choicetable-left hr {
+    border-color: black;
+}
+
+/* Demo */ 
+
+div#quiz div.choicemanager table#age td {
+    width: 330px !important;
+}
+
+div#quiz div.choicemanager table#gender td {
+    width: 330px !important;
+}
+
+div#quiz div.choicemanager table#job td {
+    width: 330px !important;
+}
+
+/* Belief */
+
+
+div#quiz table#belief td {
+    width: 330px !important;
+}
+
