@@ -5,10 +5,13 @@ $(document).ready(function() {
     J = parent.JSUS,
     W = parent.W;
 
+
+    node.window.noEscape(window);
+
     var results, answers;
     var wrongTxt, correctTxt;
-    var quizzes, opts;
-    var i, len;
+
+    results = { correct: false };
 
     wrongTxt = 'Wrong, try again';
     correctTxt = 'Correct!';
@@ -19,7 +22,7 @@ $(document).ready(function() {
                 coocom: 3,
                 reviewSelect: 2,
                 reviewRange: 0
-            };
+            };	
         });
         node.env('review_random', function() {
             answers = {
@@ -27,7 +30,7 @@ $(document).ready(function() {
                 reviewSelect: 3,
                 reviewRange: 0
             };
-        });
+        });  
     });
 
     node.env('coo', function() {
@@ -43,60 +46,169 @@ $(document).ready(function() {
                 coocom: 2,
                 reviewSelect: 3,
                 reviewRange: 0
-            };
+            }; 
         });
     });
 
-    quizzes = [
-        {
-            id: 'reviewRange',
-            mainText: 'When reviewing a painting, on which scale can you ' +
-                'express your liking?',
-            choices: [ 'From 0 to 10', 'From 1 to 5', 'From 1 to 9' ],
-            correctChoice: 0,
-        },
-        {
-            id: 'reviewSelect',
-            mainText: 'How are reviewers assigned to images and exhibitions?',
-            choices: [
-                'Randomly',
-                'If I <em>submit</em> to an exhibition I become ' +
-                    'reviewer for that exhibition in the next round',
-                'If I <em>display</em> in an exhibition I become ' +
-                    'reviewer for that exhibition in the next round'
-            ],
-            correctChoice: 0,
-            orientation: 'V'
-        },
-        {
-            id: 'rewards',
-            mainText: 'What is the reward for displaying in an exhibition?',
-            choices: [
-                'The rewards vary by exhibition: the higher the reward, ' +
-                    'the fewer the number of awards per exhibition',
-                'All rewards are the same regardless of the exhibition',
-                'All exhibitions have the same number of awards, but ' +
-                    'of different value',
-                'The rewards vary by exhibition, but the number of awards ' +
-                    'per exhibition is the same'
-            ],
-            correctChoice: 0,
-            orientation: 'V'
-        }
-    ];
+    node.env('auto', function() {     
+        node.timer.randomExec(function() {
+            results.correct = true;
+            node.done(results);   
+        });
+    });
 
-    // Append quizzes in random order.
-    J.shuffle(quizzes);
-    i = -1, len = quizzes.length;
-    for ( ; ++i < len ; ) {
-        groupOrder = (i+1);
-        opts = quizzes[i];
-        opts.groupOrder = groupOrder;
-        opts.title = false;
-        opts.shuffleChoices = true;
-        opts.group = 'quiz';
-        root = document.getElementById('q_' + groupOrder);
-        node.game.quizzes.push(node.widgets.append('ChoiceTable', root, opts));
+    function checkAnswer(a) {
+        var checked;
+        if (!a || !answers) return;
+
+        checked = getCheckedValue(a);
+        return checked != answers[a.name];
     }
+
+    function checkAnswers(submitButton) {
+        var correct, counter = 0;
+        J.each(document.forms, function(a) {
+            if (!results[a.name]) results[a.name] = [];
+            correct = checkAnswer(a);
+
+            if (correct) {
+                W.highlight(a, 'ERR');
+                document.getElementById(a.id + '_result').innerHTML = wrongTxt;
+                results[a.name].push(0);
+            }
+            else {
+                W.highlight(a, 'OK');
+                document.getElementById(a.id + '_result').innerHTML = correctTxt;
+                results[a.name].push(1);
+                counter++;
+            }
+        });
+
+        document.getElementById('answers_counter').innerHTML = counter + ' / ' + document.forms.length;
+
+        if (counter === document.forms.length) {
+            submitButton.disabled = true;
+            results.correct = true;
+        }
+        return results;
+    }
+
+    function getCheckedValue(radioObj) {
+        if (!radioObj) return;
+
+        if (radioObj.length) {
+            for (var i = 0; i < radioObj.length; i++) {
+                if (radioObj[i].checked) {
+                    return radioObj[i].value;
+                }
+            }
+        }
+
+        return radioObj.checked;
+    }
+
+    // set the radio button with the given value as being checked
+    // do nothing if there are no radio buttons
+    // if the given value does not exist, all the radio buttons
+    // are reset to unchecked
+    function setCheckedValue(radioObj, newValue) {
+        if (!radioObj)
+            return;
+        var radioLength = radioObj.length;
+        if (radioLength == undefined) {
+            radioObj.checked = (radioObj.value == newValue.toString());
+            return;
+        }
+        for (var i = 0; i < radioLength; i++) {
+            radioObj[i].checked = false;
+            if (radioObj[i].value == newValue.toString()) {
+                radioObj[i].checked = true;
+            }
+        }
+    }
+
+    window.QUIZ = {
+        setCheckedValue: setCheckedValue,
+        getCheckedValue: getCheckedValue,
+        checkAnswers: checkAnswers
+    };
+
+
+
+    //     function checkAnswer(a) {
+    //         var checked;
+    //         if (!a || !answers) return;        
+    //         checked = getCheckedValue(a);  
+    //         return checked != answers[a.name];
+    //     }
+    // 
+    //     function checkAnswers() {
+    //         var reviewRange = document.getElementById('reviewRange');
+    //         var reviewSelect = document.getElementById('reviewSelect');
+    //         var coocom = document.getElementById('coocom');
+    //         
+    //         var correct, counter = 0;
+    //         J.each(document.forms, function(a){
+    //             if (!results[a.name]) results[a.name] = [];
+    //             correct = checkAnswer(a);
+    //             
+    //             if (correct) {
+    //                 W.highlight(a, 'ERR');
+    //                 document.getElementById(a.id + '_result').innerHTML = wrongTxt;
+    //                 results[a.name].push(0);	 
+    //             }
+    //             else {  
+    //                 W.highlight(a, 'OK');
+    //                 document.getElementById(a.id + '_result').innerHTML = correctTxt;
+    //                 results[a.name].push(1);
+    //                 counter++;
+    //             }
+    //         });
+    //         
+    //         document.getElementById('answers_counter').innerHTML = counter + ' / ' + document.forms.length;
+    //         
+    //         if (counter === document.forms.length) {
+    //             submitButton.disabled = true;
+    //             results.correct = true;
+    //             node.set('QUIZ', results);
+    //             node.timer.randomEmit('DONE', 2000);
+    //         }
+    //         
+    //     }
+    // 
+    // 
+    //     function getCheckedValue(radioObj) {
+    //         if (!radioObj) return;
+    //         
+    //         if (radioObj.length) {
+    //             for (var i = 0; i < radioObj.length; i++) {
+    // 	        if (radioObj[i].checked) {
+    // 		    return radioObj[i].value;
+    // 	        }
+    // 	    }
+    //         }
+    //         
+    //         return radioObj.checked;
+    //     }
+    // 
+    //     // set the radio button with the given value as being checked
+    //     // do nothing if there are no radio buttons
+    //     // if the given value does not exist, all the radio buttons
+    //     // are reset to unchecked
+    //     function setCheckedValue(radioObj, newValue) {
+    //         if (!radioObj)
+    // 	    return;
+    //         var radioLength = radioObj.length;
+    //         if(radioLength == undefined) {
+    // 	    radioObj.checked = (radioObj.value == newValue.toString());
+    // 	    return;
+    //         }
+    //         for(var i = 0; i < radioLength; i++) {
+    // 	    radioObj[i].checked = false;
+    // 	    if(radioObj[i].value == newValue.toString()) {
+    // 	        radioObj[i].checked = true;
+    // 	    }
+    //         }
+    //     }
 
 });

@@ -25,15 +25,6 @@ module.exports = {
     // (defaults: "/pages/accessdenied.htm")
     accessDeniedUrl: '/artex/unauth.htm',
 
-    enableReconnections: true,
-    
-    rooms: [
-        {
-            name: 'singlePlayer',
-            type: 'Game',
-            logicPath: './'
-        }
-    ]
-            
+    enableReconnections: true
 };
 

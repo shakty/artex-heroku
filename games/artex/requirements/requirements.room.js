@@ -15,29 +15,8 @@ module.exports = function(settings, room, runtimeConf) {
     // Creates a stager object to define the game stages.
     var stager = new node.Stager();
 
-    var nextRoom;
-    if ('undefined' === typeof settings.nextRoom) {
-        // This should be safe, because waitRoom is created before.
-        if (channel.waitingRoom) {
-            nextRoom = channel.waitingRoom.name;
-        }
-        else {
-            throw new Error('requirements.room: no nextRoom provided, and ' +
-                            'no waiting room found.');
-        }
+    // Functions.
 
-    }
-    else if ('string' === typeof settings.nextRoom &&
-             settings.nextRoom !== '') {
-
-        nextRoom = settings.nextRoom;
-    }
-    else {
-        throw new TypeError('requirements.room: nextRoom must be undefined ' +
-                            'or non-empty string. Found: ' + settings.nextRoom);
-    }
-
-    // TODO: do we need this?
     settings.doChecking = true;
 
     function connectingPlayer(player) {
@@ -86,7 +65,7 @@ module.exports = function(settings, room, runtimeConf) {
                 registry.updateClient(msg.from, {apt: true});
                 
                  setTimeout(function() {                
-                     channel.moveClient(msg.from, nextRoom);
+                     channel.moveClient(msg.from, channel.waitingRoom.name);
                  }, 1000);
             }
         });
@@ -96,7 +75,7 @@ module.exports = function(settings, room, runtimeConf) {
     stager.addStage({
         id: 'requirements',
         cb: function() {
-            console.log('Requirements room created: ' + channel.name);
+            console.log('Requirements room created.');
         }
     });
 
@@ -117,7 +96,7 @@ module.exports = function(settings, room, runtimeConf) {
     };
 
     // Throws errors if true.
-    game.debug = false;
+    game.debug = true;
 
     game.plot = stager.getState();
 

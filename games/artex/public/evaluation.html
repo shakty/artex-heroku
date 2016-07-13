@@ -7,23 +7,31 @@
 <script src="lib/jqueryui/js/jquery-ui-1.8.20.custom.min.js" charset="utf-8"></script>
 <!-- JQUERY UI ENDS -->
 
+<!-- To avoid: "attempt to run compile-and-go script on a cleared scope" -->
+<script src="CF/ChernoffFacesSimple.js" charset="utf-8"></script>
+
 <link rel="stylesheet" type="text/css" href="css/iframe.css">
 <link rel="stylesheet" type="text/css" href="css/evaluation.css">
 
 <body>
-  <!-- <h2>Evaluation</h2> -->
-  <span id="eva-text">
-    Express a <em>quality judgement</em> on the paintings below on a scale from 0 to 10, where
-    
-    <img src="images/slider.png" class="sliderimage" alt="0 means complete dislike, 5 means that you are indifferent, and 10 means complete like" />
-    <!--  <ul>
-          <li> 0 means <em>complete dislike</em> </li>
-          <li> 5 means that you are <em>indifferent</em> </li>
-          <li> 10 means <em>complete like</em> </li>
-    </ul> -->
-    <p id="brief-explanation"></p>
-  </span>
+  <h2>Evaluation</h2>
+  Express a quality judgement on the paintings just made by other players. Move the slider on a scale from 0 to 10,  where
+  <ul>
+    <li> 0 (zero) means <em>complete dislike</em> </li>
+    <li> 5 (five) means that you are <em>indifferent</em> </li>
+    <li> 10 (ten) means <em>complete like</em> </li>
+  </ul>
+  <p>
+    The same paintings will be reviewed also by other players, and each painting that
+    will receive an average evaluation greater than <strong>5.00 (five)</strong>
+    will be put on display.
+  </p>
   <div id="container_evaluation"></div>
+  <div id="container_done">
+    <div id="done_box" >
+      <button onclick='javascript:parent.node.done();'>Click here when you are done</button>
+    </div>
+  </div>
   
 </body>
 

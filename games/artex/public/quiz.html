@@ -7,27 +7,66 @@
 <script src="lib/jqueryui/js/jquery-ui-1.8.20.custom.min.js" charset="utf-8"></script>
 <!-- JQUERY UI ENDS -->
 
-<link rel='stylesheet' href='/stylesheets/nodegame.css'></link>
+<!-- no Escape -->
+<!-- <script src="/javascripts/noescape.js" charset="utf-8"></script> -->
+<!-- no Escape ends -->
+
 <link rel="stylesheet" type="text/css" href="css/iframe.css">
 <link rel="stylesheet" type="text/css" href="css/quiz.css">
 <body>
   
   <div id="container_quiz">
-    <h1>Understanding Quiz <span id="insideh1">Correct answers <span id="answers_counter">0 / 3</span></span></h1>
+    <h1>Before starting the game answer the following questions:</h1>
+    
     <div id="quiz"> 
-
       <dl>
-        <dt id="q_1"><strong>Q.1</strong>       
-          <span id="q_1_outcome" class="quiz_result"></span>
-        </dt>
-        <dt id="q_2"><strong>Q.2</strong>
-          <span id="q_2_outcome" class="quiz_result"></span>
-        </dt>
-        <dt id="q_3"><strong>Q.3</strong>        
-          <span id="q_3_outcome" class="quiz_result"></span>
-        </dt>
+        <dt><strong>Q.1</strong></dt>
+        
+        <dd>
+          <span id="reviewRange_result" class="quiz_result"></span>
+          <form name="reviewRange" id="reviewRange">
+	    <p> When reviewing a painting, on which scale can you express your liking? </p>
+	    <p>
+	      <input type="radio" name="reviewRange" value="0"> From 0 to 10<br>
+	      <input type="radio" name="reviewRange" value="1"> From 1 to 5<br>
+	      <input type="radio" name="reviewRange" value="2"> From 1 to 9
+	    </p>
+	  </form>
+        </dd>
+        <dt><strong>Q.2</strong></dt>
+        <dd>
+          <span id="reviewSelect_result" class="quiz_result"></span>
+          <form name="reviewSelect" id="reviewSelect">
+            <p>In the current round you have been the only artist who published in exhibition A. In the next round, will you be a reviewer for exhibition A ?</p>
+            <p>
+              <input type="radio" name="reviewSelect" value="0"> Yes, in any case <br>
+              <input type="radio" name="reviewSelect" value="1"> Yes, if I submit to exhibition A again<br>
+              <input type="radio" name="reviewSelect" value="2"> Yes, but only if at least one player submits to exhibition A in the next round<br>
+              <input type="radio" name="reviewSelect" value="3"> I don't know, because reviewers are randomly assigned to the exhibitions.
+            </p>
+          </form>
+        </dd>
+        
+        <dt><strong>Q.3</strong></dt>
+        <dd>
+          <span id="coocom_result" class="quiz_result"></span>
+          <form name="coocom" id="coocom">
+            <p> If exhibition A publishes 2 paintings, B 0 paintings, and C 1 painting, what is the payoff for the artists who published ?</p>
+            <p>
+              <input type="radio" name="coocom" value="0"> They all get 3.00 CHF<br>
+              <input type="radio" name="coocom" value="1"> Those who published in A receive 2.15 each, that who published in C receive 4.5 CHF <br>
+              <input type="radio" name="coocom" value="2"> They all get 2 CHF <br>
+              <input type="radio" name="coocom" value="3"> Those who published in A receive 1.5 each, the one who published in C receive 3.00 CHF
+            </p>
+          </form>
+        </dd>
       </dl>
-
+      <div id="done_box">
+        <button onclick='javascript:parent.node.emit("check-quiz");' id="submitQuiz">
+          Click here to check your answers, and start the game.
+          <br>Correct answers <span id="answers_counter">0 / 3</span>
+        </button>
+      </div>
     </div>
   </div>
   

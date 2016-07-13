@@ -1,178 +1,28 @@
-/* Header Horizontal */
+/* Summary Tabke */
 
-div.ng_header_position-horizontal-t  {
-    vertical-align: middle;
+#pr_summary_fieldset {
+  margin: 0;
+  padding: 0;
 }
 
-div.ng_header_position-horizontal-t > .ng_widget {
-    border: 0;
-/*     
-       margin-left: 20px;
-       height: 100px;
-       */
+#pr_summary_fieldset table {
+  margin: 0;
+  padding: 0;
 }
 
-div.ng_header_position-horizontal-t > .panel-body > div {
-    vertical-align: middle;
+#pr_summary_fieldset table td {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  padding: 0 3px;
+  border-right: 1px solid #CCC;
 }
 
-div.ng_header_position-horizontal-t > .donebutton {
-    float: left;
+#pr_summary_fieldset table td:first-child {
+  padding-right: 10px;
+  text-align: left;
 }
 
-div.ng_header_position-horizontal-t > .ng_widget > .panel-heading {
-    display: none;
-    background: white;
-}
-
-.ng_header_position-horizontal-t, .ng_header_position-horizontal-b {
-    /*width: 530px !important;*/
-    margin:0 auto !important;
-}
-
-#ng_header > .visualtimer > .panel-heading {
-    display: inline;
-    font-weight: bold;
-    float: left;
-    font-size: 26px !important;
-    /*background:#eee;*/
-    border:0;
-    margin:0;
-    padding:10px;
-    height:100% !important;
-}
-
-#ng_header > .visualtimer > .panel-body {
-    float:right;
-    margin:0;
-    padding:10px !important;
-    /*background:#eee;*/
-}
-
-#ng_header > .visualtimer > .panel-body > div {
-    font-size: 26px;
-    position:relative;
-    height:20px;
-}
-
-#ng_header > .visualtimer {
-    float: left !important;
-    /* width: 175px !important; */
-    height:40px;
-    border:0;
-    /*background:#eee;*/
-    -webkit-box-shadow:inset 0 0px 0px;box-shadow:inset 0 0px 0px;
-}
-
-/* Visual Round */
-
-.visualround {
-    float: left !important;
-    margin-left: 30px;
-    margin-right: 30px;
-    /* width: 310px !important; */
-    height:40px;
-    border:0;
-    /*background:#eee;*/
-    -webkit-box-shadow:inset 0 0px 0px;box-shadow:inset 0 0px 0px;
-    -webkit-border-radius: 0px 0px 0px 0px;-moz-border-radius: 0px 0px 0px 0px;border-radius: 0px 0px 0px 0px;
-}
-
-.visualround .title {
-    font-size: 26px !important;
-    margin:0;
-    padding:5;
-    display: inline-block;
-    padding-right:6px;
-    font-weight: bold;
-}
-
-.visualround > .panel-body > div > div.rounddiv {
-    font-size: 26px !important;
-    text-align: left !important;
-}
-
-.visualround > .panel-body {
-    margin:0;
-    padding:10px;
-}
-
-.number {
-    font-size: 26px !important;
-}
-
-.text {
-    font-size: 26px !important;
-}
-
-.waitTimerTitle {
-    display:none !important;
-}
-
-.waitTimerBody {
-    display:none !important;
-}
-
-/* Money Talks */
-
-#ng_header > .moneytalks > .panel-heading {
-    display: inline;
-    font-weight: bold;
-    float:left;
-    font-size: 26px !important;
-    /*background:#eee;*/
-    border:0;
-    margin:0;
-    padding:10px;
-    height:100% !important;
-}
-
-#ng_header > .moneytalks > .panel-body {
-    float: right;
-    margin: 0;
-    padding: 10px !important;
-    /*background:#eee;*/
-}
-
-#ng_header > .moneytalks > .panel-body > div {
-    font-size: 26px;
-    position:relative;
-    height: 20px;
-}
-
-#ng_header > .moneytalks {
-    float: left !important;
-    border:0;
-    /* width: 175px !important; */
-    /*background:#eee;*/
-    -webkit-box-shadow:inset 0 0px 0px;box-shadow:inset 0 0px 0px;
-}
-
-.moneytalks > .panel-body span.moneytalksmoney {
-    font-size: 26px;
-}
-
-
-/* Done Button */
-
-#ng_header > .donebutton {
-    float: right !important;
-    width: 175px !important;
-    border:0;
-    /*background:#eee;*/
-    -webkit-box-shadow:inset 0 0px 0px;box-shadow:inset 0 0px 0px;
-}
-
-#ng_header > .donebutton > .panel-body {
-    float:right;
-    margin:0;
-    padding:10px !important;
-    height: 20px;
-    /*background:#eee;*/
-}
-
-#ng_header > .donebutton > .panel-body > div {
-    font-size: 26px;
-    position: relative;
-    height: 20px;
+iframe#mainframe {
+	height: 1000px;
 }

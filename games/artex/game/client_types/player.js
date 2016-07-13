@@ -1,7 +1,10 @@
 /**
- * # Player code for Artex Game
- * Copyright(c) 2016 Stefano Balietti
+ * # Player code for Ultimatum Game
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
+ *
+ * Handles bidding, and responds between two players.
+ * Extensively documented tutorial.
  *
  * http://www.nodegame.org
  */
@@ -32,213 +35,134 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
     // Init callback.
     stager.setOnInit(cbs.init);
 
+    stager.setOnGameOver(function() {
+        // Do something if you like!
+    });
+
     // Add all the stages into the stager.
 
-    // stager.setDefaultProperty('done', cbs.clearFrame);
-    stager.setDefaultStepRule(stepRules.SOLO);
+    stager.setDefaultProperty('done', cbs.clearFrame);
 
-    stager.extendStep('consent', {
-        frame: 'consent.html',
-        donebutton: false,
-    });
-
-    stager.extendStep('intro', {
-        frame: 'intro.html'
-    });
-
-    stager.extendStep('mood', {
-        init: function() {
-            this.mood = node.widgets.get('MoodGauge', {
-                title: false
-            });
-        },
-        frame: 'mood.html',
-        done: function() {
-            var values;
-            values = this.mood.getValues({ 
-                markAttempt: true,
-                highlight: true
-            });
-            if (values.missValues) return false;            
-            return values.items;
-        }
-    });
-
-    stager.extendStep('svo', {
-        init: function() {
-            this.svo = node.widgets.get('SVOGauge', {
-                title: false,
-                mainText: false
-            });
-        },
-        frame: 'svo.html',
-        done: function() {
-            var values;
-            values = this.svo.getValues({ highlight: true });
-            if (values.missValues) return false;
-            return {
-                id: 'svo',
-                items: values.items
-            };
-        }
-    });
-
-    stager.extendStep('demographics', {
-        init: function() {
-            var w;
-            w = node.widgets;
-            this.demo = w.get('ChoiceManager', {
-                id: 'demo',
-                title: false,
-                shuffleForms: true,
-                forms: [
-                    w.get('ChoiceTable', {
-                        id: 'age',
-                        mainText: 'Report your age group',
-                        choices: [
-                            '18-20', '21-30', '31-40', '41-50',
-                            '51-60', '61-70', '71+', 'Do not want to say'
-                        ],
-                        title: false,
-                        requiredChoice: true
-                    }),
-                    w.get('ChoiceTable', {
-                        id: 'job',
-                        mainText: 'Does your current occupation involves ' +
-                            'regular use of artistic or creative skills? ' +
-                            'If so, please report your level of experience ' +
-                            'in years.',
-                        choices: [
-                            'No', 'Yes, 1y', 'Yes, 1-2y',
-                            'Yes, 3-5y','Yes, 5y+', 'Do not want to say'
-                        ],
-                        title: false,
-                        requiredChoice: true
-                    }),
-                    w.get('ChoiceTable', {
-                        id: 'gender',
-                        mainText: 'Report your gender',
-                        choices: [
-                            'Male', 'Female', 'Other', 'Do not want to say'
-                        ],
-                        shuffleChoices: true,
-                        title: false,
-                        requiredChoice: true
-                    })
-                ]
-            });
-        },
-        frame: 'demo.html',
-        done: function() {
-            var values;
-            values = this.demo.getValues({ highlight: true });
-            if (values.missValues.length) return false;            
-            return values.forms;
-        }
-    });
-
-    stager.extendStep('instr_text', {
-        frame: settings.instrPage
-    });
-
-    stager.extendStep('instr_images', {
-        frame: 'instr_images.html'
+    stager.extendStep('instructions', {
+        cb: cbs.instructions,
+        minPlayers: MIN_PLAYERS,
+        timer: settings.timer.instructions
     });
 
     stager.extendStep('quiz', {
-        frame: 'quiz.html',
-        donebutton: { text: 'Check Quiz!' },
-        done: function() {
-            var i, len, answers, values, text, spanOutcome, fail, correct;
-            var nCorrect;
-            fail = '<em>Try again!</em>';
-            correct = '<em>Correct!</em>';
-            answers = {};
-            i = -1, len = this.quizzes.length;
-            nCorrect = 0;
-            for ( ; ++i < len ; ) {
-                spanOutcome = W.getElementById('q_' + (i+1) + '_outcome');
-                values = this.quizzes[i].getValues({ highlight: true });
-                if (!values.isCorrect) {
-                    spanOutcome.innerHTML = fail;
-                }
-                else {
-                    nCorrect++;
-                    answers[values.id] = values;
-                    spanOutcome.innerHTML = correct;
-                }
-            }
-            text = 'Check Quiz! Correct: ' + nCorrect + ' / ' + len;
-            this.node.game.donebutton.setText(text);
-            // Either all correct or timeup.
-            if ((nCorrect === len) || node.game.timer.isTimeup()) {
-                return answers;
-            }
-            else {
-                return false;
-            }
-        },
-        exit: function() {
-            // Quiz might have changed.
-            node.game.donebutton.setText('Click here when you are done!');
-        }
+        cb: cbs.quiz,
+        timer: settings.timer.quiz,
+//        done: function() {
+//            var b, QUIZ, answers, isTimeup;
+//            QUIZ = W.getFrameWindow().QUIZ;
+//            b = W.getElementById('submitQuiz');
+//
+//            answers = QUIZ.checkAnswers(b);
+//            isTimeup = node.game.timer.isTimeup();
+//
+//            if (!answers.__correct__ && !isTimeup) {
+//                return false;
+//            }
+//
+//            answers.timeUp = isTimeup;
+//            answers.quiz = true;
+//
+//            // On TimeUp there are no answers
+//            node.set(answers);
+//            node.emit('INPUT_DISABLE');
+//            
+//            return true;
+//        }
     });
 
-    stager.extendStep('training_intro', {
-        frame: 'training_intro.html'
-    });
-
-    stager.extendStep('training', {
-        frame: 'training.html',
-        cb: function() {
-            var round;
-            round = node.player.stage.round;
-            W.setInnerHTML('drawing-count', round);
-        },
-        done: function() {
-            var values;
-            values = node.game.cf.getValues({ changes: true });
-            node.game.last_cf = values.cf;
-            return values;
-        },
-        exit: function() {
-            node.game.visualTimer.setToZero();
-        }
-    });
-
-   stager.extendStep('belief', {
+    // Adjust to displaying rounds in main stage.
+    stager.extendStage('artex', {
         init: function() {
-            this.belief = node.widgets.get('ChoiceTable', {
-                id: 'belief',
-                title: false,
-                choices: [
-                    '9<sup>th</sup>', '8<sup>th</sup>', '7<sup>th</sup>',
-                    '6<sup>th</sup>', '5<sup>th</sup>', '4<sup>th</sup>',
-                    '3<sup>rd</sup>', '2<sup>nd</sup>', '1<sup>st</sup>'
-                ],
-                requiredChoice: true
-            });
+            node.game.rounds.setDisplayMode([
+                'COUNT_UP_STAGES_TO_TOTAL',
+                'COUNT_UP_ROUNDS_TO_TOTAL'
+            ]);
         },
-        frame: 'belief.html',
-        done: function() {
-            var values;
-            values = this.belief.getValues({ highlight: true });
-            if (values.choice === null) return false;            
-            return values;
+        exit: function() {
+            node.game.rounds.setDisplayMode([ 'COUNT_UP_STAGES_TO_TOTAL' ]);
         }
     });
 
-    stager.extendStep('finished_part1', {
-        frame: 'finished_part1.html',
-        done: function() {
-            console.log('finished_part1');
-            node.say('finished_part1');
+    stager.extendStep('creation', {
+        init: function() {
+            node.game.copies = [];
+        },
+        cb: cbs.creation,
+        timer: settings.timer.creation,
+        done: function(ex) {
+            // TODO: Check ex?
+            $(".copyorclose").dialog('close');
+            node.game.last_cf = node.game.cf.getAllValues();
+            node.game.last_ex = node.game.last_ex = ex;
+            return {
+                ex: ex,
+                cf: node.game.last_cf,
+                copies: node.game.copies
+            };
         }
+    });
+    
+    stager.extendStep('evaluation', {
+        init: function() {
+            // Reset evaluations.
+            node.game.evas = {};
+        },
+        cb: cbs.evaluation,
+        timer: settings.timer.evaluation,
+        done: function() {
+            var i, out, eva;
+            out = [];
+            for (i in this.evas) {
+                if (this.evas.hasOwnProperty(i)) {
+                    eva = this.evas[i];
+                    out.push({
+                        creator: i,
+                        ex: eva.ex,
+                        eva: parseFloat(eva.display.value, 10),
+                        hasChanged: !!eva.changed
+                    });
+                }
+            }
+            // Making it an object, so that is is sent as a single parameter.
+            return { reviews: out };
+        }
+    });
+    
+    stager.extendStep('dissemination', {
+        cb: cbs.dissemination,
+        timer: settings.timer.dissemination,
+    });
+
+    stager.extendStep('questionnaire', {
+        cb: cbs.questionnaire,
+        timer: 90000,
+        // `done` is a callback function that is executed as soon as a
+        // _DONE_ event is emitted. It can perform clean-up operations (such
+        // as disabling all the forms) and only if it returns true, the
+        // client will enter the _DONE_ stage level, and the step rule
+        // will be evaluated.
+        done: function() {
+
+            // TODO: do checkings, check if timeup.
+
+            node.emit('INPUT_DISABLE');
+        }
+    });
+
+    stager.extendStep('endgame', {
+        cb: cbs.endgame
     });
 
     // We serialize the game sequence before sending it.
     game.plot = stager.getState();
 
+    // Other settings, optional.   
+    
     //auto: true = automatic run, auto: false = user input
     game.env = {
         auto: settings.AUTO,
@@ -248,13 +172,10 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
         coo: !!settings.coo
     };
 
+
+
     game.verbosity = setup.verbosity;
     game.debug = setup.debug;
-
-    // Remove for live game.
-    game.events = { dumpEvents: true };
-
-    game.window = setup.window;
 
     game.nodename = 'player';
 
