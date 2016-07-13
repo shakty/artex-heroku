@@ -1,58 +1,67 @@
 body {
-  height: 600px;
-  margin: 0px auto;
-  padding: 0;
-  background: #FFF;
-  color: #333;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 14px;
-/*   overflow: hidden; */
+    margin: 0px auto;
+    padding: 0;
+    background: #FFF;
+    color: #333;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
 }
 
+div#container {
+    text-align: center;
+    font-size: 20px;
+}
+
+.subtitle {
+    font-size: 20px;
+    font-style: italics;
+}
+
+/* Have to keep it in, otherwise no sliders... */
 div {
-	background: #DADCCB /* #eee1b3 #f3ede7; #D9DBCE; */ ;
-	color: black;
-  border: 3px solid #CCC;
-  padding: 5px;
-  text-align: center;
+    background: #DADCCB;
+    color: black;
+    border: 3px solid #CCC;
+    padding: 5px;
+    text-align: center;
 }
 
 canvas {
-  border: 3px solid #CCC;
-  padding: 5px;
-  background: white;
+    border: 3px solid #CCC;
+    padding: 5px;
+    background: white;
 }
 
 .tooltip {
-	float: right;
-	position: absolute; 
-  z-index:24; 
-  color: #000;
-  background-color: #fff;
-  text-decoration: none;
-  border: 1px solid #CCC;
-  padding: 2px;
-}
- 
- 
-div#done_box {
-  height: 100px;
-  padding: 0;
+    float: right;
+    position: absolute; 
+    z-index:24; 
+    color: #000;
+    background-color: #fff;
+    text-decoration: none;
+    border: 1px solid #CCC;
+    padding: 2px;
 }
 
-div#done_box button{
-  height: 100%;
-  width: 100%;
-  font-size: 20px;
+
+div#done_box {
+    height: 100px;
+    padding: 0;
+}
+
+div#done_box button {
+    height: 100%;
+    width: 100%;
+    font-size: 20px;
 }
 
 /* jQuery Sliders */
 
 .ui-slider {
-  height: 3px;
+    height: 3px;
 } 
 
 .ui-slider-horizontal .ui-state-default {
-  height: 20px;
-  width: 10px;
+    height: 20px;
+    width: 10px;
 }

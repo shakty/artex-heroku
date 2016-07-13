@@ -29,7 +29,7 @@ div#container_creation {
 }
 
 div#creation {
-    width: 790px;
+    width: 760px;
     /* height: 550px; */
 }
 
@@ -66,11 +66,11 @@ table.cf_table td div div {
 
 /* Submission */
 
-dl#sub_list{
+dl#sub_list {
     margin: 0 auto;
 }
 
-dl#sub_list dt{
+dl#sub_list dt {
     display: inline;
 }
 
@@ -89,17 +89,25 @@ dl#sub_list dt{
 
 /* Right Part */
 
+div#container_training {
+    margin: 0 auto;
+    border: 0;
+    padding:0;
+    background: white;
+}
+
 div#container_history {
     float: right;
-    height: 560px;
-    width: 40%;
+    height: 530px;
+    width: 30%;
+    min-width: fit-content;
     border: 0;
     padding:0;
     background: white;
 }
 
 div#history {
-    height: 483px;
+    max-height: 520px;
     vertical-align: top;
     margin-bottom: 10px;
     overflow-y: auto;
@@ -125,7 +133,6 @@ dl#all_ex dt {
 dl#all_ex dd {
     padding: 0;
     margin: 0;
-    /* border: 1px solid #CCC; */
     font-size: 14px;
     font-weight: normal;
     
@@ -140,7 +147,6 @@ table.exhibition th {
 }
 
 table.exhibition td {
-    width: 105px;
     margin-bottom: 5px;
 }
 
@@ -150,6 +156,5 @@ table.exhibition tr {
     text-align: center;
     padding: 0;
     margin: 0;
-    border-right: 3px solid #CCC;
     border-bottom: 1px solid #CCC;    
 }

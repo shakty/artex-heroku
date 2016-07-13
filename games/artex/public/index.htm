@@ -4,13 +4,15 @@
 <!-- Loading  nodeGame libraries and CSS -->
 <script src="/socket.io/socket.io.js"></script>
 <script src="/javascripts/nodegame-full.js" charset="utf-8"></script>
+
+<!-- CSS -->
 <link rel="stylesheet" href="/lib/bootstrap/bootstrap.min.css" />
 <link rel='stylesheet' href='/stylesheets/nodegame.css'></link>
 <link rel='stylesheet' href='/stylesheets/fullheight.css'></link>
 <link rel='stylesheet' href='/stylesheets/noscript.css'></link>
+<link rel="stylesheet" type="text/css" href="css/main.css"> 
 <!-- end -->
 
-<link rel="stylesheet" type="text/css" href="css/main.css"> 
 
 <!-- JQUERY UI STARTS -->
 <link type="text/css" href="lib/jqueryui/css/ui-lightness/jquery-ui-1.8.20.custom.css" rel="Stylesheet" />
@@ -19,90 +21,5 @@
 <!-- JQUERY UI ENDS -->
 
 <body>
-<script>
- window.onload = function () {
-    // Configuring nodegame.
-    // All these properties can get overwritten by remoteSetup from server.
-    node.setup('nodegame', {
-      // HOST needs to be specified only
-      // if this file is located in another server
-      // host: http://myserver.com,
-      verbosity: 10,
-      window: {
-        promptOnleave: false,
-        noEscape: true // Defaults TRUE
-      },
-      env: {
-        auto: false,
-        debug: false
-      },
-      events: {
-        dumpEvents: false, // output to console all fired events
-        history: false // keep a record of all fired events
-      },
-      socket: {
-        type: 'SocketIo', // for remote connections
-        reconnect: false
-      }
-    });
-
-    // Connect to channel.
-    node.connect();
-    
-  }
-//   	window.onload = function(){
-// 	
-//   		var pc = JSUS.getQueryString('n');
-//   		
-//   		if (!pc || pc < 2 || pc > 10) {
-//   			alert('Oopps! Something went wrong. Please contact the experimenter.');
-//   			throw new Exception();
-//   		}
-//   		
-//   		var color = (pc < 5) ? "green" : (pc < 8) ? "red" : "black"; 
-//   		
-//   		var names = ['Johnson', 
-//   		             'Jackson',
-//   		             'Kerry',
-//   		             'Michaelson',
-//   		             'McCotton',
-//   		             'Bradbury',
-//   		             'Howard',
-//   		             'Walbright',
-//   		             'Chestner',
-//   		            ];
-//   		
-//   		var name = names[pc-2];
-//   		
-// 			// Create the Client		
-// 			var conf = {
-// 				url: "/pr",
-// 				//verbosity: 10,
-// 				io: {				 
-// 		  	  reconnect: false,
-// 				},
-// 				window: {
-// 					promptOnleave: false,
-// 				},
-// 				player: {
-// 					pc: pc,
-// 					color: color,
-// 					name: name, //"P_" + Math.floor(Math.random()*1000),
-// 				},
-// 				env: {
-// 					auto: false,
-// 					debug: true,
-// 					review_select: true,
-// 					review_random: false,
-// 					coo: false,
-// 					com: true,
-// 				},
-// 				events: {
-// 					history: false,
-// 				}
-// 			};
-// 	
-// 	    node.play(conf, new PeerReviewGame());    
-//	}
-</script>
+  <script type="text/javascript" src="lib/index.js" charset="utf-8"></script>
 </body>

@@ -16,7 +16,7 @@ Controls.defaults.id = 'controls';
 
 
 Controls.name = 'Controls'
-Controls.version = '0.2';
+Controls.version = '0.3';
 Controls.description = 'Wraps a collection of user-inputs controls.'
 
 function Controls(options) {
@@ -25,7 +25,6 @@ function Controls(options) {
     this.root = null;
     
     this.listRoot = null;
-    this.fieldset = null;
     this.submit = null;
     
     this.changeEvent = this.id + '_change';
@@ -207,7 +206,7 @@ Controls.prototype.refresh = function() {
     return true;
 };
 
-Controls.prototype.getAllValues = function() {
+Controls.prototype.getValues = function() {
     var out, key, el;
     out = {};
     for (key in this.features) {    
@@ -571,13 +570,13 @@ CFControls.pinDownFeatures = function(input) {
         }       
     }
     return input;
-}       
+}
 
 CFControls.prototype.parse = function() {
     return this.list.parse();
 };
 
-CFControls.prototype.getAllValues = function() {
+CFControls.prototype.getValues = function() {
     var out = {};
     for (var key in this.features) {    
         if (this.features.hasOwnProperty(key)) {

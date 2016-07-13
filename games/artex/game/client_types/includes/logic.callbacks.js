@@ -21,7 +21,8 @@ module.exports = {
     evaluation: evaluation,
     dissemination: dissemination,
     endgame: endgame,
-    notEnoughPlayers: notEnoughPlayers
+    notEnoughPlayers: notEnoughPlayers,
+    enoughPlayersAgain: enoughPlayersAgain
 };
 
 var node = module.parent.exports.node;
@@ -33,12 +34,17 @@ var counter = module.parent.exports.counter;
 var client = gameRoom.getClientType('player');
 var autoplay = gameRoom.getClientType('autoplay');
 
+var WAIT_TIME = settings.WAIT_TIME * 1000;
 
 function init() {
 
     // Create data dir. TODO: do it automatically?
     DUMP_DIR = path.resolve(channel.getGameDir(), 'data') + '/' + counter + '/';
     J.mkdirSyncRecursive(DUMP_DIR, 0777);
+
+    this.disconnectStr = 'One or more players disconnected. If they ' +
+        'do not reconnect within ' + settings.WAIT_TIME  +
+        ' seconds the game will be terminated.';
 
     // Number of reviewers per image.
     this.reviewers = 3;
@@ -73,7 +79,7 @@ function init() {
         o.treatment = gameRoom.treatmentName;
     });
 
-    // Function used in creation step
+    // Function used in submission step
     // for every newly inserted item in db.
     this.assignSubToEx = function(i) {
         var idEx = node.game.exhibitions[i.ex];
@@ -88,23 +94,42 @@ function init() {
     // Player reconnecting.
     // Reconnections must be handled by the game developer.
     node.on.preconnect(function(p) {
-        var code;
+        var code, questStage, disconnectStage;
 
-        console.log('Oh...somebody reconnected!', p);
+        console.log('Oh...somebody reconnected!', p.id);
+        code = channel.registry.getClient(p.id);
 
-        // Delete countdown to terminate the game.
-        // TODO: clearTimeout does not exist.
-        clearTimeout(this.countdown);
+        // The stage when the client disconnected.
+        questStage = node.game.questStage;
+        disconnectStage = p.stage;
+
+        // If we are in the last steps.
+        if (node.game.compareCurrentStep('questionnaire') >= 0) {
+
+            // Player disconnected before the questionnaire
+            if (GameStage.compare(disconnectStage, questStage) < 0) 
+
+
+            // TODO Handle last stage.
+            // node.remoteCommand('goto_step', XXXX);
+
+            if (node.game.compareCurrentStep('endgame') === 0) {
+                payoff = doCheckout(p);
+                // If player was not checkout yet, do it.
+                if (payoff) postPayoffs([payoff]);
+            }
+            return;
+        }
 
         // Setup newly connected client.
         gameRoom.setupClient(p.id);
 
-        // Start the game on the reconnecting client.
+        // Inits the game on the reconnecting client.
         node.remoteCommand('start', p.id, { step: false });
+
         // Add player to player list.
         node.game.pl.add(p);
 
-        code = channel.registry.getClient(p.id);
 
         // Clear any message in the buffer from.
         node.remoteCommand('erase_buffer', 'ROOM');
@@ -112,13 +137,6 @@ function init() {
         // Will send all the players to current stage
         // (also those who were there already).
         node.game.gotoStep(node.player.stage);
-
-        // If we are in the last step.
-        if (node.game.compareCurrentStep('end') === 0) {
-            payoff = doCheckout(p);
-            // If player was not checkout yet, do it.
-            if (payoff) postPayoffs([payoff]);
-        }
 
         // TODO: or...
 
@@ -135,8 +153,6 @@ function init() {
             });
             // The logic is also reset to the same game stage.
         }, 100);
-        // Unpause ROOM players
-        // node.remoteCommand('resume', 'ROOM');
     });
 
 
@@ -158,7 +174,6 @@ function evaluation() {
     node.env('review_random', function() {
         var faces, face, data;
         var i, j;
-
         faces = dataRound.fetch();
         // Generates a latin square array where:
         // - array-id of items to review,
@@ -179,6 +194,9 @@ function evaluation() {
                     ex: face.ex
                 });
             }
+
+            console.log(faces[i].player);
+
             // Send them.
             node.say('CF', faces[i].player, data);
         }
@@ -242,12 +260,133 @@ function evaluation() {
     console.log('evaluation');
 }
 
+// function dissemination() {
+//     var ex, author, cf, mean, player, works;
+//     var nextRoundReviewer, player_result;
+//     var i, j, k, len;
+//     var idEx, nPubs, s;
+//     var submissionRound;
+// 
+//     // Array of all the selected works (by exhibition);
+//     var selected;
+//     // Results of the round (by author)
+//     var player_results;
+// 
+//     // Prepare result arrays.
+//     // Contains the selected images by exhibitions.
+//     selected = { A: [], B: [], C: [] };
+//     // Contains the individual result for every player.
+//     player_results = [];
+//     submissionRound = this.getPreviousStep(2);
+//     // Loop through exhibitions.
+//     for (i = 0; i < this.last_submissions.length; i++) {
+// 
+//         // Groups all the reviews for an artist.
+//         works = this.last_submissions[i];
+// 
+//         // Exhibition.
+//         ex = this.settings.exhibitNames[i];    
+// 
+//         // Collect all reviews and compute mean.
+//         for (j = 0; j < works.length; j++) {
+//             player = works[j].player;
+//             if (!this.last_reviews[player]) {
+//                 node.err('No reviews for player: ' + player +
+//                          '. This should not happen. Some results are missing.');
+//                 continue;
+//             }
+//             author = this.pl.id.get(player);
+//             if (!author) {
+//                 node.err('No author found. This should not happen. ' +
+//                          'Some results are missing.');
+//                 continue;
+//             }
+// 
+//             // Compute average review score.
+//             mean = 0;
+//             k = -1, len = this.last_reviews[player].length;
+//             for ( ; ++k < len ; ) {
+//                 mean += this.last_reviews[player][k]
+//             }
+//             mean = mean / this.last_reviews[player].length;
+// 
+//             // Cf.
+//             cf = works[j].cf;
+// 
+//             // Player is a submitter: second choice reviewer.
+//             nextRoundReviewer = 1;
+// 
+//             player_result = {
+//                 player: player,
+//                 author: author.name || player.substr(player.length -5),
+//                 mean: mean.toFixed(2),
+//                 ex: ex,
+//                 round: submissionRound,
+//                 payoff: 0 // will be updated later
+//             };
+// 
+//             // Threshold.
+//             if (mean > settings.threshold) {
+//                 // Mark that there is at least one winner.
+//                 selected.winners = true;
+// 
+//                 J.mixin(player_result, {
+//                     cf: cf,
+//                     id: author.name,
+//                     round: node.game.getCurrentGameStage().toHash('S.r'),
+//                     pc: author.pc,
+//                     published: true
+//                 });
+// 
+//                 selected[ex].push(player_result);
+// 
+//                 // Player will be first choice as a reviewer
+//                 // in exhibition i
+//                 nextRoundReviewer = 0;
+//             }
+// 
+//             // Add player to the list of next reviewers for the
+//             // exhibition where he submitted / published
+//             this.nextround_reviewers[i][nextRoundReviewer].push(player);
+// 
+//             // Add results for single player
+//             player_results.push(player_result);
+//         }
+//     }
+// 
+//     // Dispatch exhibition results to ROOM.
+//     node.say('WIN_CF', 'ROOM', selected);
+// 
+//     // Compute individual payoffs and send them to each player.
+//     i = -1, len = player_results.length;
+//     for ( ; ++i < len ; ) {
+//         r = player_results[i];
+// 
+//         if (r.published) {
+//             if (node.game.settings.com) {
+//                 idEx = node.game.exhibitions[r.ex];
+//                 nPubs = node.game.nextround_reviewers[idEx][0].length;
+//                 r.payoff = (node.game.settings.payoff / nPubs).toFixed(2);
+//             }
+//             else {
+//                 r.payoff = node.game.settings.payoff;
+//             }
+//             // Update global payoff.
+//             code = channel.registry.getClient(r.player);
+//             code.bonus = code.bonus ? code.bonus + r.payoff : r.payoff;
+//         }
+//         node.say('PLAYER_RESULT', r.player, r);
+//     }
+// 
+//     console.log('dissemination');
+// }
+
+
 function dissemination() {
     var ex, author, cf, mean, player, works;
     var nextRoundReviewer, player_result;
     var i, j, k, len;
-    var idEx, nPubs;
-    var submissionRound;
+    var idEx, nPubs, s;
 
     // Array of all the selected works (by exhibition);
     var selected;
@@ -255,15 +394,24 @@ function dissemination() {
     var player_results;
 
     // Prepare result arrays.
-    selected = [];
+    // Contains the selected images by exhibitions.
+    selected = { A: [], B: [], C: [] };
+    // Contains the individual result for every player.
     player_results = [];
-    submissionRound = this.getPreviousStep(2);
+
+    // Loop through exhibitions.
     for (i = 0; i < this.last_submissions.length; i++) {
 
         // Groups all the reviews for an artist.
         works = this.last_submissions[i];
+
+        // Don't do more if there are no images submitted here.
+        if (!works.length) continue;
+
         // Exhibition.
-        ex = this.settings.exhibitNames[i];
+        ex = this.settings.exhibitNames[i];        
+        // Exhibition settings.
+        s = settings['ex' + ex];
 
         // Collect all reviews and compute mean.
         for (j = 0; j < works.length; j++) {
@@ -297,28 +445,34 @@ function dissemination() {
             player_result = {
                 player: player,
                 author: author.name || player.substr(player.length -5),
-                mean: mean.toFixed(2),
+                mean: Number(mean.toFixed(2)),
                 ex: ex,
-                round: submissionRound,
+                round: GameStage.toHash(node.game.getCurrentGameStage(), 'S.r'),
+                cf: cf,
+                id: author.name,
                 payoff: 0 // will be updated later
             };
 
-            // Threshold.
-            if (mean > settings.threshold) {
+            if (s.competition === 'threshold') {
+                // Threshold.
+                if (mean > settings.threshold) {
+                    // Mark that there is at least one winner.
+                    selected.winners = true;
 
-                J.mixin(player_result, {
-                    cf: cf,
-                    id: author.name,
-                    round: node.game.getCurrentGameStage().toHash('S.r'),
-                    pc: author.pc,
-                    published: true
-                });
+                    player_result.published = true;                    
+                   
+                    selected[ex].push(player_result);
 
-                selected.push(player_result);
+                    // Player will be first choice as a reviewer
+                    // in exhibition i
+                    nextRoundReviewer = 0;
 
-                // Player will be first choice as a reviewer
-                // in exhibition i
-                nextRoundReviewer = 0;
+                    
+                }
+            }
+            else {
+                // Tournament. (push anyway).
+                selected[ex].push(player_result);
             }
 
             // Add player to the list of next reviewers for the
@@ -328,11 +482,25 @@ function dissemination() {
             // Add results for single player
             player_results.push(player_result);
         }
+
+        if (s.competition === 'tournament') {
+            selected.winners = true;
+            selected[ex].sort(function(a, b) {
+                if (a.mean > b.mean) return -1;
+                if (b.mean > a.mean) return 1;
+                return 0;
+            });
+            // Take only N winners per exhibition.
+            selected[ex] = selected[ex].slice(0, s.N);
+            j = -1, len = selected[ex].length;
+            for ( ; ++j < len ; ) {
+                selected[ex][j].published = true;
+            }            
+        }
     }
 
     // Dispatch exhibition results to ROOM.
     node.say('WIN_CF', 'ROOM', selected);
-
 
     // Compute individual payoffs and send them to each player.
     i = -1, len = player_results.length;
@@ -340,17 +508,28 @@ function dissemination() {
         r = player_results[i];
 
         if (r.published) {
-            if (node.game.settings.com) {
-                idEx = node.game.exhibitions[r.ex];
-                nPubs = node.game.nextround_reviewers[idEx][0].length;
-                r.payoff = (node.game.settings.payoff / nPubs).toFixed(2);
+            s = settings['ex' + r.ex];
+            if (s.competition === 'threshold') {
+                if (node.game.settings.com) {
+                    idEx = node.game.exhibitions[r.ex];
+                    nPubs = selected[r.ex].length;
+                    r.payoff = (node.game.settings.payoff / nPubs).toFixed(2);
+                }
+                else {
+                    r.payoff = node.game.settings.payoff;
+                }
             }
+            // 'tournament'
             else {
-                r.payoff = node.game.settings.payoff;
+                r.payoff = s.reward;
             }
             // Update global payoff.
             code = channel.registry.getClient(r.player);
             code.bonus = code.bonus ? code.bonus + r.payoff : r.payoff;
+        }
+        else {
+            // Remove data we do not need to send.
+            r.cf = null;
         }
         node.say('PLAYER_RESULT', r.player, r);
     }
@@ -396,6 +575,7 @@ function gameover() {
 function notEnoughPlayers() {
     if (this.countdown) return;
     console.log('Warning: not enough players!!');
+    node.remoteCommand('pause', 'ROOM', this.disconnectStr);
     this.countdown = setTimeout(function() {
         console.log('Countdown fired. Going to Step: questionnaire.');
         node.remoteCommand('erase_buffer', 'ROOM');
@@ -403,10 +583,16 @@ function notEnoughPlayers() {
         node.game.gameTerminated = true;
         // if syncStepping = false
         //node.remoteCommand('goto_step', 5);
-        node.game.gotoStep('questionnaire');
-    }, 30000);
+        node.game.gotoStep(new GameStage('questionnaire'));
+    }, WAIT_TIME);
 }
 
+function enoughPlayersAgain() {
+    console.log('Enough players again!');
+    // Delete countdown to terminate the game.
+    clearTimeout(this.countdown);
+    this.countdown = null;
+}
 
 /**
  * ## doCheckout

@@ -21,6 +21,8 @@ module.exports = {
 
     excludeBrowsers: {
         browser: 'netscape'
-    }
+    },
+
+    nextRoom: 'waiting'
 
 };

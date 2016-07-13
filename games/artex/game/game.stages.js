@@ -8,22 +8,39 @@
 
 module.exports = function(stager, settings) {
 
+
     stager
+        .next('consent')
+        .next('intro')
+
+    // Individual part.
+
+        .next('mood')
+        .next('svo')
+        .next('demographics')
         .next('instructions')
         .next('quiz')
-        .repeat('artex', settings.REPEAT)
-        .next('questionnaire')
-        .next('endgame')
-        .gameover();
-        
-        stager.extendStage('artex', {
-            steps: [
-                'creation',
-                'evaluation',
-                'dissemination'
-            ]
-        });
+        .next('training_intro')
+        .repeat('training', settings.REPEAT_TRAINING)
+        .next('belief')   
+        .next('finished_part1');
 
-    stager.skip('instructions');
-    stager.skip('quiz');
+
+    stager.extendStage('instructions', {
+        steps: [
+            'instr_text',
+            'instr_images',
+        ]
+    });
+
+//     stager.skip('consent');
+//     stager.skip('intro');
+//     stager.skip('mood');
+//     stager.skip('svo');
+//     stager.skip('demographics');
+//     stager.skip('instructions');
+//     stager.skip('quiz');
+//     stager.skip('training');
+//     stager.skip('belief');
+
 };

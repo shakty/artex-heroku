@@ -1,60 +1,60 @@
 ul, ol {
-	margin: 30px 0 30px 10px;
+    margin: 30px 0 30px 10px;
 
 }
 
 li {
-	margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 div#container_instructions {
-  margin: 0 auto;
-  width: 800px;
-	border: 0;
-	background: #fff;
+    margin: 0 auto;
+    width: 800px;
+    border: 0;
+    background: #fff;
 }
 
 div#instructions {
-	margin: 0 auto;
-	width: 600px;
-	text-align: left;
-	padding: 10px;
+    margin: 0 auto;
+    width: 800px;
+    text-align: left;
+    padding: 10px;
 }
 
 img {
-	display: block;
-	border: 3px solid #CCC;
-	text-align: center;
-	margin: 10px auto;
+    display: block;
+    border: 3px solid #CCC;
+    text-align: center;
+    margin: 10px auto;
 }
 
 img.snapshot {
-  width: 500px;
-  margin: 30px auto;
+    width: 500px;
+    margin: 30px auto;
 }
 
 span#scrolldown {
-	display: block;
-	font-weight: bold;
-	margin: 20px;
-	text-align: center;
+    display: block;
+    font-weight: bold;
+    margin: 20px;
+    text-align: center;
 }
 
 h3 {
-	margin-top: 30px;
+    margin-top: 30px;
 }
 
 table#payoff {
-	margin: 5px 0 0 0;
-	border: 1px solid #CCC;
-	border-spacing: 0;
-	border-collapse: 0;
-	background: #EEE;
+    margin: 5px 0 0 0;
+    border: 1px solid #CCC;
+    border-spacing: 0;
+    border-collapse: 0;
+    background: #EEE;
 }
 
 table#payoff td {
-  border: 1px solid #AAA;
-  padding: 2px;
-  text-align: center;
-  width: 50px;
+    border: 1px solid #AAA;
+    padding: 2px;
+    text-align: center;
+    width: 50px;
 }
